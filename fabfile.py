@@ -52,7 +52,7 @@ def auto_clean(dirs=None):
         else:
             print('removing .pyc files')
             local('find . -name "*.pyc" -exec rm -rf {} \;')
-            result = local('autopep8 --in-place *.py')
+            result = local('find . -name \'*.py\' -exec autopep8 --in-place '{}' \;')
             if not result:
                 print('Please fix the Errors')
             return
