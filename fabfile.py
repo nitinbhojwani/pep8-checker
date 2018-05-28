@@ -12,7 +12,7 @@ def check(dirs=None):
                                           1] if directory[-1] == '/' else directory
                     result = local('flake8 ' + str(directory) + '/*.py')
             return
-        result = local('flake8 *.py')
+        result = local('flake8 .')
         if not result:
             print('Please fix the Errors')
         return
