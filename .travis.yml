@@ -1,0 +1,15 @@
+language: python
+
+python:
+ - "2.7"
+ - "3.3"
+ - "3.4"
+ - "3.5"
+ - "3.6"
+
+install:
+ - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then pip install -r requirements-python2.txt; fi
+ - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; then pip install -r requirements-python3.txt; fi
+
+script:
+ - fab check:fabfile.py
