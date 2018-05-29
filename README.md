@@ -4,7 +4,7 @@
 
 Fabfile to
 * Check syntax and lint the python code based on PEP8 standard 
-* Auto-correct according to PEP8 standard and remove .pyc files
+* Auto-correct according to PEP8 standard(to certain extent) and remove .pyc files
 
 ## Prerequisites
 * ```requirements-python2.txt```
@@ -40,10 +40,10 @@ It will check both the files - file1.py and file2.py
 ### 3. To auto-correct to PEP8 standards in case of director-y(ies)
 
 * ```fab auto_clean:dir1,dir2```
-It will remove .pyc files and auto-correct all the .py files inside both the directories dir1 and dir2
+It will remove .pyc files and auto-correct all the .py files(to certain extent), inside both the directories dir1 and dir2
 
 * ```fab auto_clean```
-It will remove .pyc files and auto-correct all .py files inside current directory
+It will remove .pyc files and auto-correct all .py files(to certain extent), inside current directory
 
 ### 4. To auto-correct to PEP8 standards in case of file(s)
 
