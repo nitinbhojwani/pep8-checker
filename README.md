@@ -1,4 +1,7 @@
 # pep8-checker
+
+[![Build Status](https://travis-ci.org/nitinbhojwani/pep8-checker.svg?branch=master)](https://travis-ci.org/nitinbhojwani/pep8-checker)
+
 Fabfile to
 * Check syntax and lint the python code based on PEP8 standard 
 * Auto-correct according to PEP8 standard and remove .pyc files
