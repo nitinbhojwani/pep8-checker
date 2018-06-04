@@ -1,84 +1,40 @@
 from fabric.api import local, task, settings
 
 
-@task
-def check(dirs=None):
-    with settings(warn_only=True):
-        if dirs:
-            dirs = dirs.split(',')
-            for directory in dirs:
-                if directory:
-                    directory = directory[:-1] \
-                        if directory[-1] == '/' else directory
-                    result = local(
-                        'find %s -name \'*.py\' -exec flake8 {} \;'
-                        % directory)
-            return
-        result = local('find . -name \'*.py\' -exec flake8 {} \;')
-        if not result:
-            print('Please fix the Errors')
-        return
+def get_exclude_dirs_str(exclude):
+    if exclude:
+        return "-not -path './" +\
+               "/*' -not -path './".join(exclude.split(',')) + "/*'"
+    else:
+        return ""
+
+
+def get_find_command(dirs, find='*.py'):
+    dirs = ' '.join(set(dirs.split(','))) if dirs else '.'
+    return "find %s -name \'%s\'" % (dirs.replace(',', ' '), find)
 
 
 @task
-def check_files(files=None):
+def check(dirs=None, exclude=None):
     with settings(warn_only=True):
-        if files:
-            files = files.split(',')
-            for file_name in files:
-                if '.py' not in file_name:
-                    print(file_name + " is not .py file")
-                    continue
-                result = local('flake8 ' + str(file_name))
-            if not result:
-                print('Please fix the Errors')
-            return
-        else:
-            print(
-                'format - fab check_files:filepath/filename1.py,filename2.py')
-        return
+        exit(local('%s %s | xargs flake8' % (get_find_command(
+            dirs), get_exclude_dirs_str(exclude))).return_code)
 
 
 @task
-def auto_clean(dirs=None):
+def auto_clean(dirs=None, exclude=None):
     with settings(warn_only=True):
-        if dirs:
-            dirs = dirs.split(',')
-            for directory in dirs:
-                local('find ' + str(directory) +
-                      ' -name "*.pyc" -exec rm -rf {} \;')
-                directory = directory[:-
-                                      1] if directory[-1] == '/' else directory
-                result = local(
-                    'find %s -name \'*.py\' -exec autopep8 --in-place {} \;'
-                    % directory)
-                print("removing trailing whitespaces...")
-                result = local(
-                    'find %s -name \'*.py\' -exec \
-                     sed -i "" -e s/[[:space:]]*$// {} \;' % directory)
-            return
-        else:
-            print('removing .pyc files')
-            local('find . -name "*.pyc" -exec rm -rf {} \;')
-            result = local(
-                'find . -name \'*.py\' -exec autopep8 --in-place {} \;')
-            print("removing trailing whitespaces...")
-            result = local(
-                'find . -name \'*.py\' -exec\
-                 sed -i "" -e s/[[:space:]]*$// {} \;')
-            if not result:
-                print('Please fix the Errors')
-            return
+        commands = [
+            {'cmd': 'rm -rf', 'msg': 'remove .pyc files', 'find': '*.pyc'},
+            {'cmd': 'autopep8 --in-place', 'msg': 'run autopep8'},
+            {'cmd': 'sed -i "" -e s/[[:space:]]*$//',
+                'msg': 'remove trailing whitespaces'}
+        ]
 
-
-@task
-def auto_clean_files(files=None):
-    with settings(warn_only=True):
-        if files:
-            files = files.split(',')
-            for file_name in files:
-                if '.py' not in file_name:
-                    print(file_name + " is not .py file")
-                    continue
-                local('autopep8 --in-place %s' % file_name)
-            return
+        for command in commands:
+            print(command['msg'], '...')
+            local('%s %s -exec %s {} \;'
+                  % (get_find_command(dirs, find=command.get('find', '*.py')),
+                     get_exclude_dirs_str(exclude),
+                     command['cmd']))
+    return

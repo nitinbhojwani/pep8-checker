@@ -22,30 +22,23 @@ OR
 
 ## Usage
 This includes fabfile.py which contains the neccessary functions
-Below are 4 intuitive commands supported:
+Below are 2 intuitive commands supported:
 
-### 1. To check syntax and linting in director-y(ies)
+### 1. To check syntax and linting in directory(ies) or file(s)
 
-* ```fab check:dir1,dir2```
-It will check all .py files inside both the directories dir1 and dir2
+* ```fab check:dir1,dir2,filepath1```
+It will check all .py files inside both the directories dir1 and dir2. Also it will check file at filepath1 if its .py
+
+* ```fab check:filepath1,filepath2```
+It will check both files at filepath1 and filepath2
 
 * ```fab check```
 It will check all .py files inside current directory
 
-### 2. To check syntax and linting in file(s)
+### 2. To auto-correct to PEP8 standards in case of directory(ies) or file(s)
 
-* ```fab check_files:file1.py,file2.py```
-It will check both the files - file1.py and file2.py
-
-### 3. To auto-correct to PEP8 standards in case of director-y(ies)
-
-* ```fab auto_clean:dir1,dir2```
-It will remove .pyc files and auto-correct all the .py files(to certain extent), inside both the directories dir1 and dir2
+* ```fab auto_clean:dir1,dir2,filepath1```
+It will remove .pyc files and auto-correct all the .py files(to certain extent), inside both the directories dir1 and dir2 and also file at filepath1 if it's .py
 
 * ```fab auto_clean```
 It will remove .pyc files and auto-correct all .py files(to certain extent), inside current directory
-
-### 4. To auto-correct to PEP8 standards in case of file(s)
-
-* ```fab auto_clean_files:file1.py,file2.py```
-It will auto-correct both files - file1.py and file2.py
